@@ -71,6 +71,7 @@ fig4 = px.bar(x=contagem_smart.index, y=contagem_smart.values, title="SmartPhone
 
 
 app = dash.Dash(__name__, external_stylesheets=[ThemeSwitchAIO])
+server = app.server
 
 # Layout do aplicativo
 app.layout = html.Div(children=[
