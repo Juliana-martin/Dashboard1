@@ -3,6 +3,11 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.express as px
 import dash
+from dash import html
+from dash import dcc
+from dash.dependencies import Input, Output
+from dash_bootstrap_templates import ThemeSwitchAIO
+import warnings
 
 cor1 = '#006DC3' #azul escuro
 cor2 = '#4287f5' #azul claro
@@ -65,19 +70,23 @@ fig4 = px.bar(x=contagem_smart.index, y=contagem_smart.values, title="SmartPhone
 
 
 
-# Criar subplots lado a lado
-fig = make_subplots(rows=2, cols=2, subplot_titles= ("Contagem de Desktops e Notebooks",
-                     "Contagem de PDA e Tablet","Contagem de Impressoras", "Contagem SmartPhone" ))
+app = dash.Dash(__name__, external_stylesheets=[ThemeSwitchAIO])
 
+# Layout do aplicativo
+app.layout = html.Div(children=[
+    html.H1("Controle de Estoque", style={'textAlign': 'center'}),
 
-# Adicionar os gráficos aos subplots
-fig.add_trace(fig1.data[0], row=1, col=1)
-fig.add_trace(fig2.data[0], row=1, col=2)
-fig.add_trace(fig3.data[0], row=2, col=1)
-fig.add_trace(fig4.data[0], row= 2, col=2)
+    html.Div([
+        dcc.Graph(figure=fig1),
+        dcc.Graph(figure=fig2),
+    ], style={'display': 'flex'}),
 
-# Atualizar layout
-fig.update_layout(title=                                        '                Controle de Estoque            ', 
-                  height=900, width=1800)
-# Exibir os subplots lado a lado
-fig.show()
+    html.Div([
+        dcc.Graph(figure=fig3),
+        dcc.Graph(figure=fig4),
+    ], style={'display': 'flex'})
+])
+
+# Executar o aplicativo
+if __name__ == '__main__':
+    app.run_server(debug=True)
